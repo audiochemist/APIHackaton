@@ -48,7 +48,12 @@ POST /activities/{activityId}/join/{userId} - Join an activity
     cd APIHackaton
     ```
 
-2. Run the application:
+2. Build the application:
+    ```sh
+    ./gradlew build
+    ```
+
+3. Run the application:
     ```sh
     ./gradlew bootRun
     ```
