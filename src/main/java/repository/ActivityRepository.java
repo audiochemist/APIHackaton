@@ -12,9 +12,9 @@ public interface ActivityRepository extends MongoRepository<Activity, String> {
 
     Optional<Activity> findById(String id);
 
-    Optional<Activity> findByNameActivity(String name);
+    Optional<Activity> findByNameActivity(String nameActivity);
 
-    void deleteByNameActivity(String name);
+    void deleteByNameActivity(String nameActivity);
 
     List<Activity> findByUsers(String userId);
 }

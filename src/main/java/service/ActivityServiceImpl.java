@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -60,12 +61,32 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void importActivities(String jsonFilePath) {
+        // Use relative path within the project directory
+        File file = new File(System.getProperty("user.dir") + "/jsons/activities.json");
+        if (!file.exists()) {
+            throw new RuntimeException("File not found: " + file.getAbsolutePath());
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<Activity> activities = objectMapper.readValue(new File(jsonFilePath), new TypeReference<List<Activity>>() {});
+            List<Activity> activities = objectMapper.readValue(file, new TypeReference<List<Activity>>() {});
             activityRepository.saveAll(activities);
         } catch (IOException e) {
             throw new RuntimeException("Failed to import activities from JSON file", e);
         }
+    }
+
+    @Override
+    public Optional<Activity> getActivityById(String id) {
+        return activityRepository.findById(id);
+    }
+
+    @Override
+    public Activity updateActivity(Activity activity) {
+        return activityRepository.save(activity);
+    }
+
+    @Override
+    public void deleteActivity(String id) {
+        activityRepository.deleteById(id);
     }
 }

@@ -8,41 +8,34 @@ This API allows managing users and activities, including user registration, acti
 - Spring Boot 3.0.0
 - MongoDB
 
-## Configuration
-1. Set environment variables for MongoDB credentials:
-    ```sh
-    export MONGODB_USERNAME=yourUsername
-    export MONGODB_PASSWORD=yourPassword
-    ```
+Step 1: Configure MongoDB
+Open MongoDB Compass and connect to your MongoDB instance.
+Create a new database named app_api_hackaton.
+Create a new collection named users in the app_api_hackaton database.
+Create a new collection named activities in the app_api_hackaton database.
 
-2. Configure the database in `application.properties`:
-    ```properties
-    spring.data.mongodb.uri=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27017/apihackaton
-    ```
-
-## Database Setup
-1. Start MongoDB server.
-2. Create the database and collections:
-    ```sh
-    mongo
-    use apihackaton
-    db.createCollection("users")
-    db.createCollection("activities")
-    ```
+Step 2: Import Postman Collection
+Open Postman.
+Import the APIHackaton.postman_collection.json file located in the src/main/resources/postman directory.
+Use the imported collection to test the API endpoints.
 
 ## Endpoints
 ### Users
-- `POST /appActivitats/user`: Register a new user.
-- `PUT /appActivitats/users/{id}`: Update user data.
-- `GET /appActivitats/users/{id}`: Get user information.
-- `DELETE /appActivitats/users/{id}`: Delete a user.
+GET /users - Get all users
+POST /users - Create a new user
+GET /users/{id} - Get user by ID
+PUT /users/{id} - Update user by ID
+DELETE /users/{id} - Delete user by ID
 
 ### Activities
-- `POST /appActivitats/activities/activity`: Create a new activity.
-- `GET /appActivitats/activities`: Get activities.
-- `POST /appActivitats/activities/join/{activityId}/{userId}`: Join an activity.
-- `GET /appActivitats/activities/export`: Export activities in JSON format.
-- `POST /appActivitats/activities/import`: Import activities from a JSON file.
+GET /activities - Get all activities 
+POST /activities - Create a new activity 
+GET /activities/{id} - Get activity by ID 
+PUT /activities/{id} - Update activity by ID 
+DELETE /activities/{id} - Delete activity by ID 
+POST /activities/import - Import activities from JSON file 
+GET /activities/export - Export activities to JSON file
+POST /activities/{activityId}/join/{userId} - Join an activity
 
 ## JSON Import
 1. Place your JSON files in a folder named `jsons` at the root of the project.
@@ -59,8 +52,3 @@ This API allows managing users and activities, including user registration, acti
     ```sh
     ./gradlew bootRun
     ```
-
-## Testing
-Run tests with:
-```sh
-./gradlew test

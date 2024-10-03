@@ -1,34 +1,43 @@
 package controller;
 
-import dto.UserDTO;
-import service.UserServiceImpl;
+import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/appActivitats/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserRepository userRepository;
 
-    @PostMapping("/user")
-    public UserDTO registerUser(@RequestBody UserDTO userDTO) {
-        return userServiceImpl.registerUser(userDTO);
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
-        return userServiceImpl.updateUser(id, userDTO);
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUser(@PathVariable String id) {
-        return userServiceImpl.getUser(id);
+    public Optional<User> getUserById(@PathVariable String id) {
+        return userRepository.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable String id, @RequestBody User user) {
+        user.setId(id);
+        return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
-        userServiceImpl.deleteUser(id);
+        userRepository.deleteById(id);
     }
 }
