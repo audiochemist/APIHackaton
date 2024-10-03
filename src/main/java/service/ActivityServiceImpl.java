@@ -3,6 +3,7 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.ActivityJsonDTO;
 import exceptions.ActivityIsFullException;
 import exceptions.ResourceNotFoundException;
 import model.Activity;
@@ -62,7 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void importActivities(String jsonFilePath) {
         // Use relative path within the project directory
-        File file = new File(System.getProperty("user.dir") + "/jsons/activities.json");
+        File file = new File("jsons/activities.json");
         if (!file.exists()) {
             throw new RuntimeException("File not found: " + file.getAbsolutePath());
         }
@@ -72,6 +73,24 @@ public class ActivityServiceImpl implements ActivityService {
             activityRepository.saveAll(activities);
         } catch (IOException e) {
             throw new RuntimeException("Failed to import activities from JSON file", e);
+        }
+    }
+
+    public void addActivitiesFromJson(String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ActivityJsonDTO> activityJsonDTOList;
+        try {
+            activityJsonDTOList = objectMapper.readValue(json, new TypeReference<List<ActivityJsonDTO>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (ActivityJsonDTO activityJsonDTO : activityJsonDTOList) {
+            Activity activity = new Activity();
+            activity.setNameActivity(activityJsonDTO.getNameActivity());
+            activity.setDescription(activityJsonDTO.getDescription());
+            activity.setMaxCapacity(activityJsonDTO.getMaxCapacity());
+            activityRepository.save(activity);
         }
     }
 
