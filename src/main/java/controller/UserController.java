@@ -1,7 +1,7 @@
 package controller;
 
 import dto.UserDTO;
-import service.UserService;
+import service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,25 +10,25 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @PostMapping("/user")
     public UserDTO registerUser(@RequestBody UserDTO userDTO) {
-        return userService.registerUser(userDTO);
+        return userServiceImpl.registerUser(userDTO);
     }
 
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
-        return userService.updateUser(id, userDTO);
+        return userServiceImpl.updateUser(id, userDTO);
     }
 
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable String id) {
-        return userService.getUser(id);
+        return userServiceImpl.getUser(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
+        userServiceImpl.deleteUser(id);
     }
 }
