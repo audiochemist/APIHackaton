@@ -22,20 +22,33 @@ Use the imported collection to test the API endpoints.
 ## Endpoints
 ### Users
 GET /users - Get all users
+
 POST /users - Create a new user
+
 GET /users/{id} - Get user by ID
+
 PUT /users/{id} - Update user by ID
+
 DELETE /users/{id} - Delete user by ID
+
 
 ### Activities
 GET /activities - Get all activities 
+
 POST /activities - Create a new activity 
+
 GET /activities/{id} - Get activity by ID 
+
 PUT /activities/{id} - Update activity by ID 
+
 DELETE /activities/{id} - Delete activity by ID 
+
 POST /activities/import - Import activities from JSON file 
+
 GET /activities/export - Export activities to JSON file
+
 POST /activities/{activityId}/join/{userId} - Join an activity
+
 
 ## JSON Import
 1. Place your JSON files in a folder named `jsons` at the root of the project.
