@@ -51,8 +51,9 @@ POST /activities/{activityId}/join/{userId} - Join an activity
 
 
 ## JSON Import
-1. Place your JSON files in a folder named `jsons` at the root of the project.
-2. Use the `/appActivitats/activities/import` endpoint to import activities from the JSON files.
+1. Place your JSON files in a folder named `jsons` at the root of the project if they are not there already.
+2. Use the `/activities/import` endpoint to import activities from the JSON files.
+3. In the Params tab, add a parameter with the name filePath and the value jsons/activities.json.
 
 ## Running the Application
 1. Clone the repository:

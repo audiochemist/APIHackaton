@@ -2,6 +2,7 @@ package controller;
 
 import model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.ActivityService;
 
@@ -38,13 +39,15 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteActivity(@PathVariable String id) {
+    public ResponseEntity<String> deleteActivity(@PathVariable String id) {
         activityService.deleteActivity(id);
+        return ResponseEntity.ok("Activity deleted successfully");
     }
 
     @PostMapping("/import")
-    public void importActivities(@RequestParam String filePath) throws IOException {
+    public ResponseEntity<String> importActivities(@RequestParam String filePath) throws IOException {
         activityService.importActivities(filePath);
+        return ResponseEntity.ok("Activities imported successfully");
     }
 
     @GetMapping("/export")
@@ -53,7 +56,8 @@ public class ActivityController {
     }
 
     @PostMapping("/{activityId}/join/{userId}")
-    public void joinActivity(@PathVariable String activityId, @PathVariable String userId) {
+    public ResponseEntity<String> joinActivity(@PathVariable String activityId, @PathVariable String userId) {
         activityService.joinActivity(activityId, userId);
+        return ResponseEntity.ok("User joined activity successfully");
     }
 }

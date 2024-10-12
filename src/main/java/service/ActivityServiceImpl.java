@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.ActivityJsonDTO;
 import exceptions.ActivityIsFullException;
-import exceptions.ResourceNotFoundException;
+import exceptions.ActivityNotFoundException;
+import exceptions.InvalidActivityDataException;
+import exceptions.UserNotFoundException;
 import model.Activity;
 import model.User;
 import repository.ActivityRepository;
@@ -29,6 +31,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity createActivity(Activity activity) {
+        if (activity.getNameActivity() == null || activity.getDescription() == null) {
+            throw new InvalidActivityDataException("Activity name and description cannot be null");
+        }
         return activityRepository.save(activity);
     }
 
@@ -39,8 +44,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void joinActivity(String activityId, String userId) {
-        Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ResourceNotFoundException("Activity not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Activity activity = activityRepository.findById(activityId).orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         try {
             activity.addUser(user);
         } catch (RuntimeException e) {
@@ -62,8 +67,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void importActivities(String jsonFilePath) {
-        // Use relative path within the project directory
-        File file = new File("jsons/activities.json");
+        File file = new File(jsonFilePath);
         if (!file.exists()) {
             throw new RuntimeException("File not found: " + file.getAbsolutePath());
         }
@@ -101,6 +105,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity updateActivity(Activity activity) {
+        if (activity.getNameActivity() == null || activity.getDescription() == null) {
+            throw new InvalidActivityDataException("Activity name and description cannot be null");
+        }
         return activityRepository.save(activity);
     }
 

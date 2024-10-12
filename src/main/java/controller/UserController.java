@@ -2,6 +2,7 @@ package controller;
 
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import repository.UserRepository;
 
@@ -37,7 +38,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         userRepository.deleteById(id);
+        return ResponseEntity.ok("User deleted successfully");
     }
 }
