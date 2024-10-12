@@ -1,6 +1,6 @@
 package controller;
 
-import model.Activity;
+import dto.ActivityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +18,26 @@ public class ActivityController {
     private ActivityService activityService;
 
     @GetMapping
-    public List<Activity> getAllActivities() {
+    public List<ActivityDTO> getAllActivities() {
         return activityService.getActivities();
     }
 
     @PostMapping
-    public Activity createActivity(@RequestBody Activity activity) {
-        return activityService.createActivity(activity);
+    public ActivityDTO createActivity(@RequestBody ActivityDTO activityDTO) {
+        return activityService.createActivity(activityDTO);
     }
 
     @GetMapping("/{id}")
-    public Optional<Activity> getActivityById(@PathVariable String id) {
-        return activityService.getActivityById(id);
+    public ResponseEntity<ActivityDTO> getActivityById(@PathVariable String id) {
+        Optional<ActivityDTO> activityDTO = activityService.getActivityById(id);
+        return activityDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public Activity updateActivity(@PathVariable String id, @RequestBody Activity activity) {
-        activity.setId(id);
-        return activityService.updateActivity(activity);
+    public ResponseEntity<ActivityDTO> updateActivity(@PathVariable String id, @RequestBody ActivityDTO activityDTO) {
+        activityDTO.setId(id);
+        ActivityDTO updatedActivity = activityService.updateActivity(activityDTO);
+        return ResponseEntity.ok(updatedActivity);
     }
 
     @DeleteMapping("/{id}")

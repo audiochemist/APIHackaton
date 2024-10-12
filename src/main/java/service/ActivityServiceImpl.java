@@ -3,6 +3,7 @@ package service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.ActivityDTO;
 import dto.ActivityJsonDTO;
 import exceptions.ActivityIsFullException;
 import exceptions.ActivityNotFoundException;
@@ -10,10 +11,11 @@ import exceptions.InvalidActivityDataException;
 import exceptions.UserNotFoundException;
 import model.Activity;
 import model.User;
-import repository.ActivityRepository;
-import repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import repository.ActivityRepository;
+import repository.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,17 +31,23 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public Activity createActivity(Activity activity) {
-        if (activity.getNameActivity() == null || activity.getDescription() == null) {
+    public ActivityDTO createActivity(ActivityDTO activityDTO) {
+        if (activityDTO.getName() == null || activityDTO.getDescription() == null) {
             throw new InvalidActivityDataException("Activity name and description cannot be null");
         }
-        return activityRepository.save(activity);
+        Activity activity = modelMapper.map(activityDTO, Activity.class);
+        activity = activityRepository.save(activity);
+        return modelMapper.map(activity, ActivityDTO.class);
     }
 
     @Override
-    public List<Activity> getActivities() {
-        return activityRepository.findAll();
+    public List<ActivityDTO> getActivities() {
+        List<Activity> activities = activityRepository.findAll();
+        return activities.stream().map(activity -> modelMapper.map(activity, ActivityDTO.class)).toList();
     }
 
     @Override
@@ -99,16 +107,19 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Optional<Activity> getActivityById(String id) {
-        return activityRepository.findById(id);
+    public Optional<ActivityDTO> getActivityById(String id) {
+        return activityRepository.findById(id).map(activity -> modelMapper.map(activity, ActivityDTO.class));
     }
 
     @Override
-    public Activity updateActivity(Activity activity) {
-        if (activity.getNameActivity() == null || activity.getDescription() == null) {
+    public ActivityDTO updateActivity(ActivityDTO activityDTO) {
+        Activity activity = activityRepository.findById(activityDTO.getId()).orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
+        if (activityDTO.getName() == null || activityDTO.getDescription() == null) {
             throw new InvalidActivityDataException("Activity name and description cannot be null");
         }
-        return activityRepository.save(activity);
+        modelMapper.map(activityDTO, activity);
+        activity = activityRepository.save(activity);
+        return modelMapper.map(activity, ActivityDTO.class);
     }
 
     @Override

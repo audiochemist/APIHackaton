@@ -1,21 +1,18 @@
 package dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import model.User;
 import lombok.Data;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class UserDTO {
     private String id;
     private String firstName;
     private String lastName;
-    private int age;
     private String email;
+    private String registrationDate;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.age = user.getAge();
-        this.email = user.getEmail();
-    }
 }
